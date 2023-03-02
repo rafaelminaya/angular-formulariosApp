@@ -1,0 +1,96 @@
+<h2>Template: <small>Básicos</small></h2>
+<hr>
+
+<div class="row">
+    <div class="col">
+        <!-- #miFormulario : Es una referencia local que ayudará manipular la configuración de los campos -->
+        <!-- #miFormulario="ngForm" : 
+            - De esta forma especificamos que será del tipo de dato "ngForm". 
+            - Con la finalidad de enlazar la referencia local de "#miFormulario" con la referencia de "ngForm" 
+            - Estos 2 nombres son dados por nosotros, no son palabras reservadas
+            - autocomplete="off" : Desactiva las sugerencias de auto completado del propio navegador 
+        -->
+
+        <form (ngSubmit)="guardar()" #miFormulario="ngForm" autocomplete="off">
+
+            <!-- CAMPO DE PRODUCTO-->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Producto</label>
+                <div class="col-sm-9">
+                    <!-- 
+                        - ngModel : 
+                        Permite relacionar un elemento html al formulario. 
+                        Para funcionar además necesita el atributo "name" con un nombre cualquiera.                                                
+                 -->
+                    <input type="text" class="form-control" [ngModel]="initForm.producto" name="producto"
+                        placeholder="Nombre del producto" required minlength="3">
+                    <!-- 
+                        - .form.controls['producto'] : 
+                        * Por medio de la la referencia local "miFormulario" accedemos a las propiedaes del formulario por template.
+                        * Estas pueden ser vistas si imprimimos el formulario en consola del navegador
+                        * Propiedades del formulario, facilitadas por el uso del módulo "FormsModule"
+                        - .['producto']? : Es el nombre del elemento html, mapeado por el name="producto" en la etiqueta "<input>", 
+                        además de usar "?" para condicionar su esta de "invald" o "touched"
+                         -->
+                    <!-- <span class="form-text text-danger" *ngIf="miFormulario.form.controls['producto']?.invalid &&
+                        miFormulario.form.controls['producto']?.touched">Debe de ser de 3 letras</span> -->
+
+                    <!-- nombreValido() : Método que contiene la lógica de la validación por template controlada desde el componente TS-->
+                    <span class="form-text text-danger" *ngIf="nombreValido()">Debe de ser de 3 letras</span>
+                </div>
+            </div>
+            <!-- CAMPO DE PRECIO -->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Precio</label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" [ngModel]="initForm.precio" name="precio"
+                        placeholder="Precio del producto" required min="0">
+                    <span class="form-text text-danger" *ngIf="precioValido()">Debe ser mayor a 0</span>
+                </div>
+            </div>
+            <!-- CAMPO DE EXISTENCIAS -->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Existencias</label>
+                <div class="col-sm-9">
+                    <!-- customMin : Directiva personalizada, creada acá y usada en el archivo "custom-min.directive.ts"
+                     [minimo]="0" : valor minimo que permitrirá este "<input>" . De esta forma el "customMin" le va a extender el atributo "[minimo]" al elemento "<input>"
+                     -->
+                    <input type="number" class="form-control" [ngModel]="initForm.existencias" name="existencias"
+                        customMin [minimo]="0" placeholder="Existencias del producto" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <!-- Deshabilitamos el formulario si es invalido
+                         float-end : Estilo de bootstrap para alinear al final de la fila 
+                        -->
+                    <button type="submit" [disabled]="miFormulario.invalid"
+                        class="btn btn-primary float-end">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <span>Valid</span>
+        <pre>{{ miFormulario.valid }}</pre>
+
+        <span>Pristine</span>
+        <pre>{{ miFormulario.pristine | json }}</pre>
+
+        <span>Touched</span>
+        <pre>{{ miFormulario.touched | json }}</pre>
+
+        <span>Value</span>
+        <pre>{{ miFormulario.value | json }}</pre>
+
+
+        <!-- .errors queda comentado ya que es un valor condicionado a que exista la propiedad de "existencias" -->
+        <span>CustomDirective</span>
+        <pre>{{ miFormulario.controls['existencias']?.errors | json }}</pre>
+
+
+    </div>
+</div>
