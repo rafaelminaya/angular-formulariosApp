@@ -1,1 +1,74 @@
-<p>dinamicos works!</p>
+<h2>Reactivos: <small>Dinámicos</small> </h2>
+<hr>
+<form [formGroup]="miFormulario" (submit)="guardar()" autocomplete="off">
+
+    <!-- NOMBRE -->
+    <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Nombre</label>
+        <div class="col-sm-9">
+
+            <input class="form-control" formControlName="nombre" type="text" placeholder="Nombre de la persona">
+
+            <span class="form-text text-danger" *ngIf="campoNoEsValido('nombre')">Este campo es obligatorio</span>
+        </div>
+    </div>
+
+    <!-- AGREGAR FAVORITO -->
+    <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Agregar</label>
+        <div class="col-sm-9">
+            <!--Bootstrap -> Input group -> Button addons -->
+            <div class="input-group">
+                <input class="form-control" [formControl]="nuevoFavorito" type="text" placeholder="Agregar favorito"
+                    (keyup.enter)="agregar()">
+                <button class="btn btn-outline-primary" type="button" (click)="agregar()">Agregar</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- LISTA DE JUEGOS FAVORITOS -->
+    <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Favoritos</label>
+        <!-- Especifica qu está relacionado con al propiedad "favoritos" que es de tipo "array" en el compoennte TS  -->
+        <div class="col-sm-9" formArrayName="favoritos">
+
+            <div class="input-group mb-1" *ngFor="let favorito of favoritosArr.controls; let i = index">
+
+                <!-- Posición de cada índice de la iteración de "favoritos" -->
+                <!-- El "name" del campo será el index, asignado dinámicamente en cada iteración -->
+                <input class="form-control" [formControlName]="i">
+
+                <button class="btn btn-outline-danger" type="button" (click)="borrar(i)">Eliminar</button>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <button type="button" class="btn btn-primary float-end" (click)="guardar()">Guardar</button>
+        </div>
+    </div>
+</form>
+
+<span>Persona</span>
+
+<div class="row">
+    <div class="col">
+        <span>Valid</span>
+        <pre>{{ miFormulario.valid }}</pre>
+
+        <span>Value</span>
+        <pre>{{ miFormulario.value | json }}</pre>
+
+        <span>Agregar juego</span>
+        <pre>{{ nuevoFavorito.valid }}</pre>
+
+        <span>Agregar value</span>
+        <pre>{{ nuevoFavorito.value }}</pre>
+
+    </div>
+</div>
