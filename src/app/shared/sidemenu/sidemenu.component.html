@@ -19,3 +19,14 @@
     </li>
 
 </ul>
+
+<h2 class="mt-3">Validaciones</h2>
+<hr>
+<ul class="list-group">
+    <!-- [routerLink]="[item.ruta]" : Estamos asignando la ruta de forma dinámica en cada iteración, entre corcehetes "[]" porque se recibe un arrelo -->
+    <!-- routerLinkActive="active" : Se añadirá el estilo "active" si estamos en esta ruta  -->
+    <li class="list-group-item" *ngFor="let item of authMenu" [routerLink]="[item.ruta]" routerLinkActive="active">
+        {{ item.texto }}
+    </li>
+
+</ul>
